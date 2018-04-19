@@ -14,7 +14,7 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(reducer, composeEnhancers(applyMiddleware(logger)));
 
 // console.log('reducer::', reducer);
-console.log(store.getState());
+// console.log(store.getState());
 
 ReactDOM.render(
   <BrowserRouter>

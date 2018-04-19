@@ -1,5 +1,10 @@
 import { combineReducers } from 'redux';
-import { GET_CATEGORIES, GET_POSTS, GET_POSTS_BY_CATEGORY } from '../actions';
+import {
+  SET_CATEGORY,
+  GET_CATEGORIES,
+  GET_POSTS,
+  GET_POSTS_BY_CATEGORY
+} from '../actions';
 
 // 公共状态
 const initGlobalState = {};
@@ -13,7 +18,15 @@ const initCategoryState = {
   list: []
 };
 function categories(state = initCategoryState, action) {
-  return state;
+  switch (action.type) {
+    case SET_CATEGORY:
+      return {
+        ...state,
+        current: action.category
+      };
+    default:
+      return state;
+  }
 }
 
 const initPostsState = {
