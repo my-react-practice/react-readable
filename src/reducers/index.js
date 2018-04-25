@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 import {
-  SET_CATEGORY,
+  SET_CURRENT_CATEGORY,
+  SET_CATEGORIES,
   GET_CATEGORIES,
   GET_POSTS,
   GET_POSTS_BY_CATEGORY
@@ -19,10 +20,15 @@ const initCategoryState = {
 };
 function categories(state = initCategoryState, action) {
   switch (action.type) {
-    case SET_CATEGORY:
+    case SET_CURRENT_CATEGORY:
       return {
         ...state,
         current: action.category
+      };
+    case SET_CATEGORIES:
+      return {
+        ...state,
+        list: action.categories
       };
     default:
       return state;

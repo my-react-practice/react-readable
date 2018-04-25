@@ -4,7 +4,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { createStore, applyMiddleware, compose } from 'redux';
 import { Provider } from 'react-redux';
 import logger from 'redux-logger';
-import App from './App';
+import App from './components/App';
 import reducer from './reducers';
 import registerServiceWorker from './registerServiceWorker';
 
