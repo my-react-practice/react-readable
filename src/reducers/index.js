@@ -1,46 +1,52 @@
 import { combineReducers } from 'redux';
-import {
-  SET_CURRENT_CATEGORY,
-  SET_CATEGORIES,
-  GET_CATEGORIES,
-  GET_POSTS,
-  GET_POSTS_BY_CATEGORY
-} from '../actions';
+import { UPDATE_CURRENT_CATEGORY, GET_CATEGORIES, GET_POSTS } from '../actions';
 
 // 公共状态
-const initGlobalState = {};
+const initGlobalState = {
+  currentCategory: 'all'
+};
 
 function common(state = initGlobalState, action) {
-  return state;
-}
-
-const initCategoryState = {
-  current: 'all',
-  list: []
-};
-function categories(state = initCategoryState, action) {
-  switch (action.type) {
-    case SET_CURRENT_CATEGORY:
+  const { type, currentCategory } = action;
+  switch (type) {
+    case UPDATE_CURRENT_CATEGORY:
       return {
         ...state,
-        current: action.category
-      };
-    case SET_CATEGORIES:
-      return {
-        ...state,
-        list: action.categories
+        currentCategory
       };
     default:
       return state;
   }
 }
 
-const initPostsState = {
-  currentId: 'all',
-  list: []
-};
-function posts(state = initPostsState, action) {
-  return state;
+/**
+ * 类别数据state
+ * @param {Array} state
+ * @param {Object} action
+ */
+function categories(state = [], action) {
+  const { type, categories } = action;
+  switch (type) {
+    case GET_CATEGORIES:
+      return [...state, ...categories];
+    default:
+      return state;
+  }
+}
+
+/**
+ * 帖子数据state
+ * @param {Array} state
+ * @param {Object} action
+ */
+function posts(state = [], action) {
+  const { type, posts } = action;
+  switch (type) {
+    case GET_POSTS:
+      return [...state, ...posts];
+    default:
+      return state;
+  }
 }
 
 const initCommentsState = {

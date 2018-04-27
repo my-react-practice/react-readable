@@ -1,44 +1,63 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { setCurrentCategory } from '../actions';
-const CategoryList = ({
-  currentCategory,
-  categoryList,
-  setCurrentCategory
-}) => {
-  return (
-    <ul className="ctg-list">
-      {categoryList.map(({ name, path }) => (
-        <li
-          key={name}
-          className={`ctg-item ${name === currentCategory ? 'active' : ''}`}
-        >
-          <Link
-            to={`/category/${name}`}
-            onClick={e => {
-              e.preventDefault();
-              setCurrentCategory(name);
-            }}
-          >
-            {name}
-          </Link>
-        </li>
-      ))}
-    </ul>
-  );
-};
+import Paper from 'material-ui/Paper';
+import Menu from 'material-ui/Menu';
+import MenuItem from 'material-ui/MenuItem';
+import { updateCurrentCategory } from '../actions';
+import Styles from '../styles';
+class CategoryList extends Component {
+  render() {
+    const { currentCategory, categoryList, updateCurrentCategory } = this.props;
+    return (
+      <Paper style={Styles.menu}>
+        <Menu>
+          {categoryList.map(({ name, path }) => (
+            <MenuItem
+              primaryText={name}
+              containerElement={<Link to={`/category/${name}`} />}
+              key={name}
+              style={name === currentCategory ? Styles.menuItemChecked : {}}
+              onClick={e => {
+                // e.preventDefault();
+                updateCurrentCategory(name);
+              }}
+            />
+          ))}
+        </Menu>
+        {/* <ul className="ctg-list">
+          {categoryList.map(({ name, path }) => (
+            <li
+              key={name}
+              className={`ctg-item ${name === currentCategory ? 'active' : ''}`}
+            >
+              <Link
+                to={`/category/${name}`}
+                onClick={e => {
+                  e.preventDefault();
+                  updateCurrentCategory(name);
+                }}
+              >
+                {name}
+              </Link>
+            </li>
+          ))}
+        </ul> */}
+      </Paper>
+    );
+  }
+}
 
 function mapStateToProps(state, props) {
   return {
-    currentCategory: state.categories.current,
-    categoryList: state.categories.list
+    currentCategory: state.common.currentCategory,
+    categoryList: state.categories
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    setCurrentCategory: category => dispatch(setCurrentCategory(category))
+    updateCurrentCategory: category => dispatch(updateCurrentCategory(category))
   };
 }
 

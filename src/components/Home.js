@@ -1,10 +1,16 @@
 import React, { Component } from 'react';
-import { BrowserRouter, Route, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import CategoryList from './CategoryList';
 import PostsList from './PostsList';
 
+import { updateCurrentCategory } from '../actions';
+
 class Home extends Component {
+  componentDidMount() {
+    const { updateCurrentCategory, match } = this.props;
+    updateCurrentCategory(match.params.category || 'all');
+  }
   render() {
     return (
       // 默认视图
@@ -31,4 +37,10 @@ class Home extends Component {
   }
 }
 
-export default connect()(Home);
+function mapDispatchToProps(dispatch) {
+  return {
+    updateCurrentCategory: category => dispatch(updateCurrentCategory(category))
+  };
+}
+
+export default connect(null, mapDispatchToProps)(Home);

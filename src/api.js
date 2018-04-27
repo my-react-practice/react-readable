@@ -25,3 +25,15 @@ export const getCategories = () =>
         });
       return data;
     });
+
+export const getPosts = () =>
+  fetch(`${api}/posts`, { headers })
+    .then(res => res.json())
+    .then(data => {
+      data.categories &&
+        data.categories.unshift({
+          name: CTG_ALL,
+          path: CTG_ALL
+        });
+      return data;
+    });

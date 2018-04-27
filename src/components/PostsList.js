@@ -9,7 +9,7 @@ class PostsList extends Component {
 
 function mapStateToProps(state, props) {
   return {
-    currentCategory: state.categories.current
+    currentCategory: state.common.currentCategory
   };
 }
 
