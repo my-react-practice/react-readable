@@ -1,22 +1,40 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import CategoryList from './CategoryList';
-import PostsList from './PostsList';
+import CategoryList from '../components/CategoryList';
+// import PostsList from './PostsList';
 import FlatButton from 'material-ui/FlatButton';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
-import { updateCurrentCategory } from '../actions';
+
+import { selectCategory, fetchCategoriesIfNeeded } from '../actions';
 
 class Home extends Component {
+  componentDidMount() {
+    const { dispatch } = this.props;
+    dispatch(fetchCategoriesIfNeeded());
+  }
+  handleChange = nextCategory => {
+    const { dispatch } = this.props;
+    dispatch(selectCategory(nextCategory));
+  };
   render() {
-    // console.log('Home render...', this.props);
+    const { selectedCategory, categories } = this.props;
     return (
-      // 默认视图
       <div className="home" style={styles.home}>
         {/* 类别列表 */}
         <div className="ctg-list-wrap" style={styles.ctgListWrap}>
-          <CategoryList {...this.props} />
+          {categories.isFetching &&
+            categories.items.length === 0 && <p>Loading...</p>}
+          {!categories.isFetching &&
+            categories.items.length === 0 && <p>Empty.</p>}
+          {categories.items.length > 0 && (
+            <CategoryList
+              selectedCategory={selectedCategory}
+              onChange={this.handleChange}
+              list={categories.items}
+            />
+          )}
         </div>
         <div className="main" style={styles.main}>
           {/* 排序、新增操作 */}
@@ -27,7 +45,8 @@ class Home extends Component {
 
           {/* 帖子列表 */}
           <div className="post-list-wrap">
-            <PostsList {...this.props} />
+            posts list...
+            {/* <PostsList {...this.props} /> */}
           </div>
           <FloatingActionButton
             containerElement={<Link to="/postedit/new" />}
@@ -62,4 +81,11 @@ const styles = {
   }
 };
 
-export default connect()(Home);
+function mapStateToProps(state) {
+  return {
+    selectedCategory: state.selectedCategory,
+    categories: state.categories
+  };
+}
+
+export default connect(mapStateToProps)(Home);

@@ -1,64 +1,50 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
+// import { NavLink } from 'react-router-dom';
 import Paper from 'material-ui/Paper';
 import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
-import { updateCurrentCategory } from '../actions';
-import Styles from '../styles';
+import { cyan600 } from 'material-ui/styles/colors';
 class CategoryList extends Component {
   render() {
-    const { currentCategory, categoryList, updateCurrentCategory } = this.props;
+    const { selectedCategory, onChange, list } = this.props;
     return (
-      <Paper style={Styles.menu}>
+      <Paper style={styles.menu}>
         <Menu>
-          {categoryList.map(({ name, path }) => (
+          {list.map(({ name, path }) => (
+            // <NavLink
+            //   to={`/category/${name}`}
+            //   key={name}
+            //   style={{
+            //     textDecoration: 'none'
+            //   }}
+            // >
             <MenuItem
               primaryText={name}
-              containerElement={<Link to={`/category/${name}`} />}
               key={name}
-              style={name === currentCategory ? Styles.menuItemChecked : {}}
+              style={
+                name === selectedCategory ? styles.menuItemChecked : {}
+                // containerElement={<NavLink to={`/category/${name}`} />}
+              }
               onClick={e => {
-                // e.preventDefault();
-                updateCurrentCategory(name);
+                onChange(name);
               }}
             />
-          ))}
+          ))
+          // </NavLink>
+          }
         </Menu>
-        {/* <ul className="ctg-list">
-          {categoryList.map(({ name, path }) => (
-            <li
-              key={name}
-              className={`ctg-item ${name === currentCategory ? 'active' : ''}`}
-            >
-              <Link
-                to={`/category/${name}`}
-                onClick={e => {
-                  e.preventDefault();
-                  updateCurrentCategory(name);
-                }}
-              >
-                {name}
-              </Link>
-            </li>
-          ))}
-        </ul> */}
       </Paper>
     );
   }
 }
 
-function mapStateToProps(state, props) {
-  return {
-    currentCategory: state.common.currentCategory,
-    categoryList: state.categories
-  };
-}
+const styles = {
+  menu: {
+    display: 'inline-block'
+  },
+  menuItemChecked: {
+    color: cyan600
+  }
+};
 
-function mapDispatchToProps(dispatch) {
-  return {
-    updateCurrentCategory: category => dispatch(updateCurrentCategory(category))
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(CategoryList);
+export default CategoryList;

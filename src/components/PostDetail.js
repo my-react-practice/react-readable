@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 
 class PostDetail extends Component {
   render() {
-    return <div>PostDetail</div>;
+    console.log(this.props);
+    const { match } = this.props;
+    return <div>{'PostDetail ' + match.params.id}</div>;
   }
 }
 

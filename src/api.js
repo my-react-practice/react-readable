@@ -23,17 +23,15 @@ export const getCategories = () =>
           name: CTG_ALL,
           path: CTG_ALL
         });
-      return data;
+      return data.categories;
     });
 
 export const getPosts = () =>
   fetch(`${api}/posts`, { headers })
     .then(res => res.json())
-    .then(data => {
-      data.categories &&
-        data.categories.unshift({
-          name: CTG_ALL,
-          path: CTG_ALL
-        });
-      return data;
-    });
+    .then(data => data);
+
+export const getPostsByCtg = ctg =>
+  fetch(`${api}/posts/${ctg}`, { headers })
+    .then(res => res.json())
+    .then(data => data);
