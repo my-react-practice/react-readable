@@ -10,6 +10,7 @@ class AsyncApp extends Component {
         <div style={styles.container}>
           {/* 默认视图/分类视图 */}
           <Route exact path="/" component={Home} />
+          <Route exact path="/category/:category" component={Home} />
           {/* <Route
             path="/category/:category"
             render={({ match }) => <Home category={match.params.category} />}

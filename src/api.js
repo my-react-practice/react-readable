@@ -15,7 +15,9 @@ const headers = {
 
 export const CTG_ALL = 'all';
 export const getCategories = () =>
-  fetch(`${api}/categories`, { headers })
+  fetch(`${api}/categories`, {
+    headers
+  })
     .then(res => res.json())
     .then(data => {
       data.categories &&
@@ -27,11 +29,28 @@ export const getCategories = () =>
     });
 
 export const getPosts = () =>
-  fetch(`${api}/posts`, { headers })
+  fetch(`${api}/posts`, {
+    headers
+  })
     .then(res => res.json())
     .then(data => data);
 
-export const getPostsByCtg = ctg =>
-  fetch(`${api}/posts/${ctg}`, { headers })
+export const getPostsByCategory = category => {
+  if (category === 'all') {
+    return getPosts();
+  } else {
+    return fetch(`${api}/${category}/posts`, {
+      headers
+    })
+      .then(res => res.json())
+      .then(data => data);
+  }
+};
+
+export const getPostsDetail = postsId => {
+  return fetch(`${api}/posts/${postsId}`, {
+    headers
+  })
     .then(res => res.json())
     .then(data => data);
+};

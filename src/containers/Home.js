@@ -2,24 +2,41 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import CategoryList from '../components/CategoryList';
-// import PostsList from './PostsList';
+import PostsList from '../components/PostsList';
 import FlatButton from 'material-ui/FlatButton';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
-
-import { selectCategory, fetchCategoriesIfNeeded } from '../actions';
+import {
+  selectCategory,
+  fetchCategoriesIfNeeded,
+  fetchPostsIfNeeded,
+  invalidateCategory
+} from '../actions';
 
 class Home extends Component {
   componentDidMount() {
-    const { dispatch } = this.props;
-    dispatch(fetchCategoriesIfNeeded());
+    const { dispatch, match } = this.props;
+    dispatch(selectCategory(match.params.category));
+    dispatch(fetchCategoriesIfNeeded(match.params.category));
+    dispatch(fetchPostsIfNeeded());
   }
-  handleChange = nextCategory => {
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.selectedCategory !== this.props.selectedCategory) {
+      const { dispatch, selectedCategory } = nextProps;
+      dispatch(invalidateCategory());
+      dispatch(fetchPostsIfNeeded(selectedCategory));
+    }
+  }
+  handlePostsClick = postId => {
+    // const {dispatch} = this.props
+    console.log('postId::', postId);
+  };
+  handleCategoryClick = nextCategory => {
     const { dispatch } = this.props;
     dispatch(selectCategory(nextCategory));
   };
   render() {
-    const { selectedCategory, categories } = this.props;
+    const { selectedCategory, categories, posts } = this.props;
     return (
       <div className="home" style={styles.home}>
         {/* 类别列表 */}
@@ -31,7 +48,7 @@ class Home extends Component {
           {categories.items.length > 0 && (
             <CategoryList
               selectedCategory={selectedCategory}
-              onChange={this.handleChange}
+              onClick={this.handleCategoryClick}
               list={categories.items}
             />
           )}
@@ -45,8 +62,7 @@ class Home extends Component {
 
           {/* 帖子列表 */}
           <div className="post-list-wrap">
-            posts list...
-            {/* <PostsList {...this.props} /> */}
+            <PostsList onClick={this.handlePostsClick} list={posts.items} />
           </div>
           <FloatingActionButton
             containerElement={<Link to="/postedit/new" />}
@@ -84,7 +100,8 @@ const styles = {
 function mapStateToProps(state) {
   return {
     selectedCategory: state.selectedCategory,
-    categories: state.categories
+    categories: state.categories,
+    posts: state.posts
   };
 }
 
